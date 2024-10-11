@@ -36,10 +36,18 @@ export const generateNews = async (req, res) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Replace with your secret
     const userId = decodedToken.id;
 
-    const user = await User.findById(userId);
+    const cacheKey = `user:${userId}:keywordset`;
+
+    const cacheContents = await redisClient.zRange(cacheKey, 0, -1, { REV: true });
+
+    if(!cacheContents) {
+        console.log('cache miss! retrieving user data...');
+        const user = await User.findById(userId);
+        cacheContents = user.interests;
+    }
     
-    if(user.interests) {
-        const keywords = user.interests;
+    if(cacheContents) {
+        const keywords = cacheContents;
         
         var q = "";
         if(keywords.length==1) q = keywords[0];

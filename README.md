@@ -35,7 +35,7 @@ cd keyBERT-server
 pip install -r requirements.txt
 python script.py
 ```
-# Environment Variables
+## Environment Variables
 Set up a .env file with the following fields
 ```sh
 PORT = your-port

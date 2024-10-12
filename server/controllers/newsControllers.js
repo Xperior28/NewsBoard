@@ -29,7 +29,25 @@ redisClient.on('ready', () => {
 // Connect the Redis client
 await redisClient.connect();
 
+export const generateTopHeadlines = async(req, res) => {
+    const BASE_URL = 'https://newsapi.org/v2/top-headlines';
+    const COUNTRY = 'us';
+    const PAGE_SIZE = 50;
+
+    const url = `${BASE_URL}?country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${process.env.NEWS_API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        const articles = response.data.articles;
+        res.json(articles);
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({message: 'Could not retrieve the articles!'});
+    }
+};
+
 export const generateNews = async (req, res) => {
+    console.log('fetching...');
     const token = req.headers.authorization.split(' ')[1]; // Assuming Bearer token format
 
     // Decode the token to get the userId
@@ -45,9 +63,11 @@ export const generateNews = async (req, res) => {
         const user = await User.findById(userId);
         cacheContents = user.interests;
     }
+
     
-    if(cacheContents) {
+    if(cacheContents.length) {
         const keywords = cacheContents;
+        const PAGE_SIZE = 50;
         
         var q = "";
         if(keywords.length==1) q = keywords[0];
@@ -55,7 +75,7 @@ export const generateNews = async (req, res) => {
             q = keywords.join(" OR ");
         }
 
-        const url = `https://newsapi.org/v2/everything?q=${q}&pageSize=10&sortBy=relevancy&apiKey=${process.env.NEWS_API_KEY}`;
+        const url = `https://newsapi.org/v2/everything?q=${q}&pageSize=${PAGE_SIZE}&sortBy=relevancy&apiKey=${process.env.NEWS_API_KEY}`;
 
         try {
             const response = await axios.get(url);
@@ -67,34 +87,24 @@ export const generateNews = async (req, res) => {
         }
 
     } else {
-        const BASE_URL = 'https://newsapi.org/v2/top-headlines';
-        const COUNTRY = 'us';
-        const PAGE_SIZE = 10;
-
-        const url = `${BASE_URL}?country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${process.env.NEWS_API_KEY}`;
-
-        try {
-            const response = await axios.get(url);
-            const articles = response.data.articles;
-            res.json(articles);
-        } catch(error) {
-            console.log(error);
-            res.status(500).json({message: 'Could not retrieve the articles!'});
-        }
+        res.json([]);
     }
 };
 
-export const generateKeyNews = async(req, res) => {
+export const generateKeyNews = async (req, res) => {
     const { keywords } = req.body;
+    const PAGE_SIZE = 50;
 
-    var q = "";
+    var q = '';
 
     if(keywords.length==1) q = keywords[0];
-    else {
+    else if(keywords.length>1) {
         q = keywords.join(" OR ");
+    } else {
+        q = 'bitcoin'
     }
 
-    const url = `https://newsapi.org/v2/everything?q=${q}&pageSize=10&sortBy=relevancy&apiKey=${process.env.NEWS_API_KEY}`;
+    const url = `https://newsapi.org/v2/everything?q=${q}&pageSize=${PAGE_SIZE}&sortBy=relevancy&apiKey=${process.env.NEWS_API_KEY}`;
 
     try {
         const response = await axios.get(url);

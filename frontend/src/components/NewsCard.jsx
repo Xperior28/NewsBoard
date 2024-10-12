@@ -1,6 +1,6 @@
 // src/components/NewsCard.jsx
 import PropTypes from "prop-types";
-import axios from 'axios';
+import api from "../axiosConfig";
 
 
 const NewsCard = ({ article }) => {
@@ -10,7 +10,7 @@ const NewsCard = ({ article }) => {
         const token = localStorage.getItem('token'); 
 
         try {
-            const response = await axios.post('http://localhost:3000/news/extract', {
+            const response = await api.post('http://localhost:3000/news/extract', {
             text: text,
             }, {
             headers: {

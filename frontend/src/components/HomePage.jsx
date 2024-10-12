@@ -1,9 +1,9 @@
 // src/components/HomePage.jsx
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import NewsCard from './NewsCard';
 import PropTypes from 'prop-types';
+import api from '../axiosConfig';
 
 // SearchBar Component
 const SearchBar = ({ onSearch }) => {
@@ -56,11 +56,11 @@ const GenerateNews = ({ searchTerm, section }) => {
         const token = localStorage.getItem('token');
 
         if (section === 'search') {
-          response = await axios.post(`http://localhost:3000/news/generate`, { keywords: [searchTerm] });
+          response = await api.post(`http://localhost:3000/news/generate`, { keywords: [searchTerm] });
         } else if (section === 'top') {
-          response = await axios.get(`http://localhost:3000/news/topheadlines`);
+          response = await api.get(`http://localhost:3000/news/topheadlines`);
         } else {
-          response = await axios.get(`http://localhost:3000/news/generate`, {
+          response = await api.get(`http://localhost:3000/news/generate`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -150,6 +150,7 @@ const HomePage = () => {
   const handleClick = (sectionTerm) => { 
     setSection(sectionTerm);
   }
+  console.log('rerender homepage!');
 
   return (
     <div className='flex flex-col gap-6 font-newsreader min-h-screen items-center bg-gray-100'>

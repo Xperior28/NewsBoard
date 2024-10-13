@@ -95,13 +95,11 @@ export const generateKeyNews = async (req, res) => {
     const { keywords } = req.body;
     const PAGE_SIZE = 50;
 
-    var q = '';
+    var q = 'bitcoin'; //default value
 
     if(keywords.length==1) q = keywords[0];
     else if(keywords.length>1) {
         q = keywords.join(" OR ");
-    } else {
-        q = 'bitcoin'
     }
 
     const url = `https://newsapi.org/v2/everything?q=${q}&pageSize=${PAGE_SIZE}&sortBy=relevancy&apiKey=${process.env.NEWS_API_KEY}`;

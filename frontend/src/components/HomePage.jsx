@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch }) => {
     <div className="flex items-center justify-center w-full p-4">
       <input
         type="text"
-        placeholder="Search for news..."
+        placeholder="Search for news... (Ex: bitcoin)"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="w-1/2 p-2 border rounded-l-lg border-gray-300 focus:outline-none focus:border-blue-500"
@@ -138,7 +138,7 @@ GenerateNews.propTypes = {
 
 // HomePage Component
 const HomePage = () => {
-  const [searchTerm, setSearchTerm] = useState(''); // State to hold the search term
+  const [searchTerm, setSearchTerm] = useState('bitcoin'); // State to hold the search term
   const [section, setSection] = useState('top');
 
   // Callback function for SearchBar

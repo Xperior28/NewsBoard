@@ -32,6 +32,8 @@ npm run dev
 Run the keyBERT python server
 ```sh
 cd keyBERT-server
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 python script.py
 ```

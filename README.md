@@ -47,7 +47,13 @@ NEWS_API_KEY = your-newsapi-key
 REDIS_KEY = your-redis-key
 ```
 
+## Demonstration
+https://github.com/user-attachments/assets/7dd0af88-75a4-442a-abe0-1d0f3b578912
 
 ## License
 MIT
+
+
+
+https://github.com/user-attachments/assets/fe1f895b-0b68-4d0b-bb8e-6c316b597ab0
 
